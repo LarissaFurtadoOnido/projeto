@@ -17,7 +17,9 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 
 export default function App() {
-   const [antonLoaded] = useAntonFonts({ Anton_400Regular });
+  const [menuSelecionado, setMenuSelecionado] = useState('Home');
+  const [highlightRow, setHighlightRow] = useState(0);
+  const [antonLoaded] = useAntonFonts({ Anton_400Regular });
   const fontsLoaded = antonLoaded;
   if (!fontsLoaded) return null;
 
@@ -31,7 +33,7 @@ export default function App() {
 
         <View style={styles.conteudo}>
           <Text style={styles.connect}>CONNECT</Text>
-          <Image source={require('./assets/splash-icon.png')} style={styles.fotoPerfil} />
+          <Image source={require('./assets/foto1.png')} style={styles.fotoPerfil} />
         </View>
       </View> 
 
@@ -55,10 +57,10 @@ export default function App() {
                        borderRadius: 20,
                     }}
                   >
-                    <Image source={require('./assets/splash-icon.png')} style={styles.fotoLateral1} />
+                    <Image source={require('./assets/foto2.png')} style={styles.fotoLateral1} />
                   </ImageBackground>
                 ) : (
-                  <Image source={require('./assets/splash-icon.png')} style={styles.fotoLateral1} />
+                  <Image source={require('./assets/foto3.png')} style={styles.fotoLateral1} />
                 )}
               </View>
             ))}
@@ -67,17 +69,23 @@ export default function App() {
           <View style={styles.conteudocentro}>
             <ScrollView
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ gap: 20, paddingBottom: 100 }}
+              contentContainerStyle={{ gap: 5, paddingBottom: 100 }}
             >
               {[...Array(4)].map((_, rowIndex) => (
                 <ScrollView
                   key={rowIndex}
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{ gap: 10 }}
+                  contentContainerStyle={{ gap: 5 }}
                 >
                   {[...Array(5)].map((_, colIndex) => (
                     <View key={colIndex} style={styles.bloco1}>
+                      {rowIndex === 0 && colIndex === 0 ? (<Image source={require('./assets/foto1.png')} style={styles.perfil} />
+                    
+                      ) : (
+                        <Image source={require('./assets/paisagem2.jpg')} style={styles.cantoQuadrado} />
+                      )}
+                      
                       <View style={styles.button}>
                           <TouchableOpacity style={styles.button1}>
                             <Text style={styles.buttonText}>+</Text>
@@ -98,11 +106,46 @@ export default function App() {
 
    <SafeAreaView style={styles.safeMenu}>
         <View style={styles.iconMenu}>
-          <Ionicons name="home-outline" size={28} color="#fff"/>
-          <Ionicons name="search-outline" size={28} color="#fff" />
-          <Ionicons name="add-circle-outline" size={28} color="#fff" />
-          <Ionicons name="notifications-outline" size={28} color="#fff" />
-          <Ionicons name="person-outline" size={28} color="#fff" />
+          <TouchableOpacity onPress={() => setMenuSelecionado('Home')}>
+            <Ionicons
+              name="home-outline"
+              size={28}
+              color={menuSelecionado === 'Home' ? '#51B2D1' : '#fff'}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => setMenuSelecionado('Search')}>
+            <Ionicons
+              name="search-outline"
+              size={28}
+              color={menuSelecionado === 'Search' ? '#51B2D1' : '#fff'}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => setMenuSelecionado('Create')}>
+            <Ionicons
+              name="add-circle-outline"
+              size={28}
+              color={menuSelecionado === 'Create' ? '#51B2D1' : '#fff'}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => setMenuSelecionado('Notifications')}>
+            <Ionicons
+              name="notifications-outline"
+              size={28}
+              color={menuSelecionado === 'Notifications' ? '#51B2D1' : '#fff'}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => setMenuSelecionado('Profile')}>
+            <Ionicons
+              name="person-outline"
+              size={28}
+              color={menuSelecionado === 'Profile' ? '#51B2D1' : '#fff'}
+            />
+          </TouchableOpacity>
+
         </View>
     </SafeAreaView>
     </> 
@@ -207,7 +250,7 @@ const styles = StyleSheet.create({
 
   conteudocentro:{
     width: '80%',
-    paddingLeft: 10
+    paddingLeft: 5
   },
 
   button:{
@@ -230,12 +273,30 @@ const styles = StyleSheet.create({
   },
 
   bloco1: {
-  width: 270,
-  height: 180,
-  backgroundColor: '#263149',
-  borderRadius: 30,
-  alignItems: 'flex-end',
-  
-},
+    width: 290,
+    height: 190,
+    backgroundColor: '#263149',
+    borderRadius: 15,
+    alignItems: 'flex-end',
+  },
+
+  perfil:{
+    width: '90%',
+    height: '90%',
+    position: 'relative',
+    paddingBottom: 0,
+    marginTop: '7%',
+    left: 30
+  },
+
+  cantoQuadrado: {
+    width: 60,
+    height: 60,
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    borderRadius: 15,
+  },
+
 
 });
