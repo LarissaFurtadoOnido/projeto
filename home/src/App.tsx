@@ -11,16 +11,29 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 //#51B2D1 - AZUL CLARINHO
 //#263149 - AZUL ESCURO
 
-//NOVA COR
-//#A7EBC2 - VERDE CLARO
-//#7BB9D1 - AZUL CLARO
-
-
 export default function App() {
   const [menuSelecionado, setMenuSelecionado] = useState('Home');
   const [highlightRow, setHighlightRow] = useState(0);
   const [antonLoaded] = useAntonFonts({ Anton_400Regular });
   const fontsLoaded = antonLoaded;
+
+  const categories = [
+    { id: '1', title: 'Comida & Bebida' },
+    { id: '2', title: 'Entretenimento' },
+    { id: '3', title: 'Atividades Sociais' },
+    { id: '4', title: 'Outdoor & Cultural' },
+  ];
+
+  const [lateralItems, setLateralItems] = useState(
+    Array.from({ length: 10 }, (_, i) => ({ id: String(i + 1) }))
+  );
+
+  const loadMoreItems = () => {
+    const nextId = lateralItems.length + 1;
+    const novos = Array.from({ length: 5 }, (_, i) => ({ id: String(nextId + i) }));
+    setLateralItems([...lateralItems, ...novos]);
+  };
+
   if (!fontsLoaded) return null;
 
   return (
@@ -28,43 +41,46 @@ export default function App() {
    <SafeAreaView style={styles.container} edges={['bottom', 'top']}>
       <StatusBar barStyle="light-content"/>
       <View style={styles.cabecalho}>
-        <LinearGradient colors={['#51B2D1', '#87E1AB']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
-        style={StyleSheet.absoluteFill}> </LinearGradient>
-
-        <View style={styles.conteudo}>
-          <Text style={styles.connect}>CONNECT</Text>
-          <Image source={require('./assets/foto1.png')} style={styles.fotoPerfil} />
-        </View>
-      </View> 
-
-      <View style={styles.head}>
-          <ScrollView style={styles.lateralWrapper}>
-            {[...Array(5)].map((_, i) => (
-              <View
-                key={i}
-                style={[
-                  styles.lateralItem,
-                  { marginTop: i === 0 ? 0 : 10 }
-                ]}
+          <Text style={styles.textocabecalho}>Qual vibe gostaria de curtir hoje?</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {categories.map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                style={{
+                  backgroundColor: '#fff',
+                  paddingVertical: 12,
+                  paddingHorizontal: 16,
+                  borderRadius: 20,
+                  marginRight: 10,
+                  marginTop: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderWidth: 0.3, 
+                  borderColor: 'black', 
+                }}
+                onPress={() => console.log('Categoria:', item.title)}
               >
-                {i === 1 ? (
-                  <ImageBackground
-                    source={require('./assets/paisagem.jpg')}
-                    style={styles.imageBackground}
-                    imageStyle={{
-                       height: 300,
-                       width: 75,
-                       borderRadius: 20,
-                    }}
-                  >
-                    <Image source={require('./assets/foto2.png')} style={styles.fotoLateral1} />
-                  </ImageBackground>
-                ) : (
-                  <Image source={require('./assets/foto3.png')} style={styles.fotoLateral1} />
-                )}
-              </View>
+                <Text style={{ color: '#263149', fontWeight: 'bold', fontSize: 15 }}>{item.title}</Text>
+              </TouchableOpacity>
             ))}
           </ScrollView>
+        
+          
+      </View>
+      
+
+      <View style={styles.head}>
+           <FlatList
+              data={lateralItems}
+              keyExtractor={(item) => item.id}
+              renderItem={() => <View style={styles.lateralItem} />}
+              contentContainerStyle={{ paddingVertical: 10 }}
+              ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+              showsVerticalScrollIndicator={false}
+              scrollEnabled={true}
+              onEndReached={loadMoreItems}
+              onEndReachedThreshold={0.1}
+            />
             
           <View style={styles.conteudocentro}>
             <ScrollView
@@ -80,10 +96,10 @@ export default function App() {
                 >
                   {[...Array(5)].map((_, colIndex) => (
                     <View key={colIndex} style={styles.bloco1}>
-                      {rowIndex === 0 && colIndex === 0 ? (<Image source={require('./assets/foto1.png')} style={styles.perfil} />
+                      {rowIndex === 0 && colIndex === 0 ? (<Image source={require('../assets/images/foto1.png')} style={styles.perfil} />
                     
                       ) : (
-                        <Image source={require('./assets/paisagem2.jpg')} style={styles.cantoQuadrado} />
+                        <Image source={require('../assets/images/paisagem2.jpg')} style={styles.cantoQuadrado} />
                       )}
                       
                       <View style={styles.button}>
@@ -98,8 +114,6 @@ export default function App() {
               ))}
             </ScrollView>
           </View>
-
-
       </View>
   
    </SafeAreaView> 
@@ -110,7 +124,7 @@ export default function App() {
             <Ionicons
               name="home-outline"
               size={28}
-              color={menuSelecionado === 'Home' ? '#51B2D1' : '#fff'}
+              color={menuSelecionado === 'Home' ? '#51B2D1' : '#63625F'}
             />
           </TouchableOpacity>
 
@@ -118,7 +132,7 @@ export default function App() {
             <Ionicons
               name="search-outline"
               size={28}
-              color={menuSelecionado === 'Search' ? '#51B2D1' : '#fff'}
+              color={menuSelecionado === 'Search' ? '#51B2D1' : '#63625F'}
             />
           </TouchableOpacity>
 
@@ -126,7 +140,7 @@ export default function App() {
             <Ionicons
               name="add-circle-outline"
               size={28}
-              color={menuSelecionado === 'Create' ? '#51B2D1' : '#fff'}
+              color={menuSelecionado === 'Create' ? '#51B2D1' : '#63625F'}
             />
           </TouchableOpacity>
 
@@ -134,7 +148,7 @@ export default function App() {
             <Ionicons
               name="notifications-outline"
               size={28}
-              color={menuSelecionado === 'Notifications' ? '#51B2D1' : '#fff'}
+              color={menuSelecionado === 'Notifications' ? '#51B2D1' : '#63625F'}
             />
           </TouchableOpacity>
 
@@ -142,7 +156,7 @@ export default function App() {
             <Ionicons
               name="person-outline"
               size={28}
-              color={menuSelecionado === 'Profile' ? '#51B2D1' : '#fff'}
+              color={menuSelecionado === 'Profile' ? '#51B2D1' : '#63625F'}
             />
           </TouchableOpacity>
 
@@ -155,7 +169,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     position: 'relative',
     paddingHorizontal:10,
     height: '100%'
@@ -163,69 +177,29 @@ const styles = StyleSheet.create({
 
   cabecalho:{
     width: '100%',
-    height: '20%', 
-    borderRadius: 30,
-    overflow: 'hidden', 
-    justifyContent: 'center', 
-    
-  },
-  
-  conteudo:{
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    marginBottom: '10%',
+    marginTop: '5%',
   },
 
-  connect:{
-    lineHeight: 60, 
-    fontSize: 70,
-    fontFamily: 'Anton_400Regular',
-  },
-
-  fotoPerfil:{
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    borderWidth: 3,
-    borderColor: '#fff'
-  },
-
-  fotoLateral1:{
-    width: 45,
-    height: 45,
-    borderRadius: 30,
-    borderWidth: 3,
-    borderColor: '#fff',
-    marginTop: '10%'
+  textocabecalho:{
+    marginLeft: 10,
+    fontWeight: 'bold',
+    fontSize: 20,
   },
 
   head: {
-    marginTop: '5%',
     flexDirection: 'row',
-    justifyContent: 'center',
-    flex: 1,
-  },
-
-  imageBackground: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center' ,
-  },
-
-
-  lateralWrapper: {
-    width: 80,
   },
 
   lateralItem:{
-    height: 300,
+    height: 75,
     width: 75,
-    borderRadius: 20,
+    borderRadius: 37.5,
     overflow: 'hidden',
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: '#87E1AB',
-    marginTop: '10%',
+    borderWidth: 2,
+    borderColor: 'black',
   },
 
   safeMenu: {
@@ -235,7 +209,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '13%',
     justifyContent: 'center',
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
   },
  
   iconMenu: {
